@@ -121,7 +121,6 @@ Calculate the correlation coefficient between `x` vs. `y` for the `star` dataset
 star_data <- datasaurus_dozen %>%
   filter(dataset == "star")
 
-# Calculate a summary statistic that we call `r` equal to the correlation coefficient between `x` and `y` for the `star` dataset 
 star_data %>%
   summarize(r = cor(x, y))
 ```
@@ -146,15 +145,20 @@ Calculate the correlation coefficient between `x` vs. `y` for the `circle` datas
 > RESPONSE: 
 
 ```{r}
+circle_data <- datasaurus_dozen %>%
+  filter(dataset == "circle")
 
+circle_data %>%
+  summarize(r = cor(x, y))
 ```
 
 Then, plot `y` versus `x` for the `circle` dataset.  Does the plot look the same as either plot from the other two datasets?
 
-> RESPONSE:
+> RESPONSE: The plot of y vs. x for the circle dataset looks like a circle, which is different from either of the two prior datasets.
 
-```{r}
-
+```{r fig.fullwidth=TRUE}
+ggplot(data = circle_data, mapping = aes(x = x, y = y)) +
+  geom_point()
 ```
 
 *You should pause again, commit changes with the commit message "Added answer for Ex 4", and push.*
@@ -183,7 +187,7 @@ datasaurus_dozen %>%
 
 What do you notice?  Is the correlation coefficiant an appropriate summary for any of these datasets?  Why or why not?
 
-> RESPONSE:
+> RESPONSE: The correlation coefficient is approximately the same for all of these datasets, but the data themselves all have extremely different patterns from one another. This shows that the correlation coefficient is a very poor summary for these datasets since it provides too little information to provide an understanding of the data.
 
 
 *You should pause again, commit changes with the commit message "Added answer for Ex 5", and push.*
