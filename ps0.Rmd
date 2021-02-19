@@ -128,10 +128,11 @@ star_data %>%
 
 Then, plot `y` versus `x` for the `star` dataset.  Does the plot look the same as the plot of the `dino` data?
 
-> RESPONSE:
+> RESPONSE: Unlike the dino plot, the star dataset has points arranged in the shape of a star on a plot of y vs. x.
 
-```{r}
-
+```{r fig.fullwidth=TRUE}
+ggplot(data = star_data, mapping = aes(x = x, y = y)) +
+  geom_point()
 ```
 
 
