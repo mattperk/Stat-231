@@ -30,7 +30,7 @@ Steps to proceed:
 ```{r, setup, include=FALSE}
 # Load packages here 
 library(mdsr)   
-library(ggplot2)
+library(tidyverse)
 knitr::opts_chunk$set(
   tidy=FALSE,     # display code as typed
   size="small",   # slightly smaller font for code
@@ -85,16 +85,21 @@ g
 ### a.
 Consider Figure 3.7 in Section 3.2.1.  What does `reorder(drg, mean_charge)` do?  Recreate the plot, but use `x = drg` instead of `x = reorder(drg, mean_charge)`.  What happens?
 
-> ANSWER: 
+> ANSWER: reorder(drg, mean_charge) modifies the plot such that the procedures are listed in order of average statewide charge rather than by the numbers that they have been assigned.
 
 ```{r}
 data(MedicareCharges)
-ChargesNJ <- MedicareCharges %>% 
+ChargesNJ <- MedicareCharges %>%
   ungroup() %>%
   filter(stateProvider == "NJ")
 
 # create the plot object
-p <- 
+p <- ggplot(
+  data = ChargesNJ, 
+  aes(x = drg, y = mean_charge)) + geom_col(fill = "gray") +
+  ylab("Statewide Average Charges ($)") + 
+  xlab("Medical Procedure (DRG)") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = rel(0.5)))
   
   
 # print the plot
@@ -104,10 +109,15 @@ p
 ### b.
 Replace `x = drg` with `x = reorder(drg, mean_charge)`, but also remove the `theme()` line.  Now what happens?  What was the purpose of the `theme()` line?  Hint: You may need to knit the document and look at the pdf to better observe what's happening.
 
-> ANSWER:  
+> ANSWER: The numbers for each DRG are now squished together and labelled horizontally in fairly large font and not properly spaced apart and written vertically as they were in the original graphs.
 
 ```{r}
-
+p <- ggplot(
+  data = ChargesNJ, 
+  aes(x = reorder(drg, mean_charge), y = mean_charge)) + geom_col(fill = "gray") +
+  ylab("Statewide Average Charges ($)") + 
+  xlab("Medical Procedure (DRG)")
+p
 ```
 
 
