@@ -127,6 +127,8 @@ p
 As you read through (and, better yet -- code along with (not required, but useful practice!)) -- the extended example on historical baby names in section 3.3.1, write down two questions you have about any of the R code used in that example.  (Your questions could be about what a specific part of the code -- ggplot or not -- is actually doing, or a more general question about any of the commands used.)  Please be thoughtful about your questions; we will use them (anonymously) in an exercise in class this week.
 
 > ANSWER: 
+1) How exactly does the "%+%" operator work? The book seems to essentially use it to update the data underlying a plot that we have created without disturbing the aesthetics. Are there other cases where this operator is used?
+2) How does one know when to use the "~" operator? It seems to be associated with plotting particular variables against each other, but I'm not sure I am totally clear on its purpose.
 
 ```{r}
 # to get you started following along . . .
