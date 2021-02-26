@@ -85,7 +85,8 @@ Use the `MLB_teams` data in the `mdsr` package to create an informative data gra
 ```{r}
 MLB_teams
 ggplot(data = MLB_teams) + 
-  geom_point(mapping = aes(x = WPct, y = payroll)) +    geom_smooth(aes(x = WPct, y = payroll), method = "lm")
+  geom_point(mapping = aes(x = WPct, y = payroll)) + 
+  geom_smooth(aes(x = WPct, y = payroll), method = "lm")
 ```
 
 
@@ -100,7 +101,8 @@ Note: be sure you load the `nasaweather` package and use the `storms` dataset fr
 library(nasaweather)
 storms
 ggplot(data = storms) + 
-  geom_path(aes(x = long, y = lat, color = name)) + scale_color_discrete(guide="none") + facet_wrap(~year)
+  geom_path(aes(x = long, y = lat, color = name)) + 
+  scale_color_discrete(guide="none") + facet_wrap(~year)
 ```
 
 
@@ -115,6 +117,6 @@ For the calendar assignment:
 
 Note that you are not wed to the ideas you record here.  The visualizations and table can change before your final submission.  But, I want to make sure your plan aligns with your questions and that you're on the right track.
 
-> ANSWER:
+> ANSWER: I plan to focus on understanding which activities I spend most of my time on, and how the amount of work vs. leisure changes as the semester progrsses. The first visualization will be a bar graph comparing the total cumulative time spent on each activity, and the second visualization will be a scatter plot showing the percentage of time spent on work as time progresses. The table will show each day as a row and each activity as a column and will count how much time was spent on a given activity on a given day. 
 
  
