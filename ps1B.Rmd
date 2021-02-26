@@ -47,15 +47,15 @@ Consider the data graphic for Career Paths at Williams College at: https://web.w
 
 a. What story does the data graphic tell?  What is the main message that you take away from it?
 
-> ANSWER:
+> ANSWER: The graphic shows groupings of majors at Williams College and the career paths followed by those who choose a particular major. The main message I take away from this graph is that major choice is somewhat predictive of ultimate career path, although there are still many alternative paths students take.
 
 b. Can the data graphic be described in terms of the taxonomy presented in this chapter?  If so, list the visual cues, coordinate system, and scale(s).  If not, describe the feature of this data graphic that lies outside of that taxonomy.
 
-> ANSWER:
+> ANSWER: The data can be described fairly well using the taxonomy from the chapter. The graphic uses primarily color and area to distinguish major/career groups and the amount of people in each group. The data appears in a circle most like a polar coordinate system, and the scale used by the graphic is categorical.
 
 c. Critique and/or praise the visualization choices made by the designer.  Do they work? Are they misleading?  Thought-provoking?  Brilliant?  Are there things that you would have done differently?  Justify your response.
 
-> ANSWER:
+> ANSWER: I may have used more colors in the graphic beyond blue/brown/green to distinguish more between majors like economics and culture studies which are quite different, but otherwise I think the graphic is designed very well, highlighting differences in paths between groups, and the interactivity is crucial for making everything much more clear.
 
 
 \newpage
@@ -63,12 +63,15 @@ c. Critique and/or praise the visualization choices made by the designer.  Do th
 
 Explain why the following command does not color the data points blue, then write down the command that will turn the points blue.
 
-> ANSWER:
+> ANSWER: This command does not color the data points blue because it should not go into aes() since it is not an explicit mapping for a particular variable. Putting it outside the aesthetic fixes the error.
 
 ```{r}
 library(ggplot2)
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
+
+ggplot(data = mpg) + 
+  geom_point(color = "blue", mapping = aes(x = displ, y = hwy))
 ```
 
 
@@ -77,10 +80,12 @@ ggplot(data = mpg) +
 
 Use the `MLB_teams` data in the `mdsr` package to create an informative data graphic that illustrates the relationship between winning percentage and payroll in context. What story does your graph tell?
 
-> ANSWER:
+> ANSWER: In general, the higher the winning percentage the higher the payroll tends to be, but the relationship is not incredibly strong.
 
 ```{r}
-
+MLB_teams
+ggplot(data = MLB_teams) + 
+  geom_point(mapping = aes(x = WPct, y = payroll)) +    geom_smooth(aes(x = WPct, y = payroll), method = "lm")
 ```
 
 
@@ -92,7 +97,10 @@ Using data from the `nasaweather` package, use the `geom_path()` function to plo
 Note: be sure you load the `nasaweather` package and use the `storms` dataset from that package!
 
 ```{r}
-
+library(nasaweather)
+storms
+ggplot(data = storms) + 
+  geom_path(aes(x = long, y = lat, color = name)) + scale_color_discrete(guide="none") + facet_wrap(~year)
 ```
 
 
