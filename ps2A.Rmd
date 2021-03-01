@@ -45,7 +45,8 @@ In Section 4.3.1, the `flights` and `carrier` tables within the `nycflights13` p
 ```{r}
 library(nycflights13)
 flights_joined <- flights %>% 
-  inner_join(airlines, by = c("carrier" = "carrier"))
+  inner_join(airlines, by = 
+  c("carrier" = "carrier"))
 glimpse(flights_joined)
 ```
 
