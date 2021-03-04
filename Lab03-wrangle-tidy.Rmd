@@ -117,11 +117,11 @@ Let's start by creating a scatterplot with log(spending) on the x-axis and log(e
 
 First, sketch the scatterplot (don't worry about the actual x-y relationship, but be sure to identify the different variables that will be needed to create the plot).  What variables do you need in the dataset in order to create the scatterplot in ggplot?  What will each observation (row) in the dataset represent?
 
-> RESPONSE: The values on the x-axis will come from the spending data from 2013-2014 by state, and the values on the y-axis will come from the coverage data from 2013-2014 by state.
+> RESPONSE: The values on the x-axis will come from the spending data from 2013-2014 by state, and the values on the y-axis will come from the emplyer coverage data from 2013-2014 by state. We can take these data and combine them into one dataset.
 
 What are some of the steps that will need to be taken to get the data in that form?  
 
-> RESPONSE: The data will need to be filtered to include only those years and be able to map points corresponding to the same states between the datasets.
+> RESPONSE: The data will need to be filtered to include only the variables of interest, combined, and then pivot longer by year to get the data in the form of interest.
 
 *When you're done with the above responses, check that you're on the right track by viewing the video "Lab03-q1-sketch" (posted on Moodle).*
 
@@ -131,8 +131,58 @@ Now implement those steps in R, tidying the dataset for plotting.  After the fin
 
 
 ```{r}
-
+coverage <- coverage %>%
+  select("Location",
+         "2013__Employer",
+         "2014__Employer",
+         "2013__Total",
+         "2014__Total")
+tempData <- merge(coverage, spending, by = "Location")
+temp2Data <- merge(tempData, state_info, by = "Location")
+fullData <- temp2Data %>%
+  select(-Abbrev)
+fullData
 ```
+
+```{r}
+fullDataLong <- fullData %>%
+  pivot_longer(
+    cols = c("2013__Employer",
+             "2014__Employer",
+             "2013__Total Health Spending",
+             "2014__Total Health Spending",
+             "2013__Total",
+             "2014__Total"),
+    names_to = "YearMeasure",
+    values_to = "Value")
+fullDataLong
+```
+
+```{r}
+fullDataLongPlus <- fullDataLong %>%
+  separate("YearMeasure", into = c("Year", "Measure"),sep ="__", )
+fullDataLongPlus
+```
+
+```{r}
+PreFinData <- fullDataLongPlus %>%
+  pivot_wider(
+    names_from = Measure, 
+    values_from = Value, 
+    values_fill = 0
+  )
+FinData <- PreFinData %>%
+  clean_names()
+FinData
+```
+
+```{r}
+ggplot(data = FinData) +
+    geom_point(mapping = aes(
+      x = log(total_health_spending),
+      y = log(employer),color = year))
+      
+``` 
 
 We see there is a strong relationship between log(spending) and log(coverage) within each year. However, you might suspect that health care coverage and spending is also strongly related to population size.  In the `coverage` dataset, the total type is not really a formal type of health care coverage. It really represents just the total number of people in the state. This is useful information.  Next:
 
@@ -145,7 +195,16 @@ What do you notice?
 > RESPONSE: 
 
 ```{r}
- 
+FinData2 <- FinData %>%
+  rename(total_pop = total)
+ggplot(data = FinData2) +
+    geom_point(mapping = aes(
+      x = log(employer),
+      y = log(total_pop),color = year))
+ggplot(data = FinData2) +
+    geom_point(mapping = aes(
+      x = log(total_health_spending),
+      y = log(total_pop),color = year))
 ```
 
 
@@ -154,7 +213,16 @@ Lastly, to account for total population, create a scatterplot of spending per ca
 > RESPONSE: 
 
 ```{r}
-
+FinData3 <- FinData2 %>%
+  mutate(spending_capita =
+        total_health_spending*1000000/total_pop) %>%
+  mutate(prop_employer = employer/total_pop)
+FinData3
+ggplot(data = FinData3) +
+    geom_point(mapping = aes(
+      x = prop_employer,
+      y = spending_capita, color = region))+
+  facet_wrap(~year)
 ```
 
 *This is a good place to pause, commit changes with the commit message "Added answer for Q1", and push.*
