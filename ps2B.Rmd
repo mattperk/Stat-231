@@ -51,7 +51,6 @@ a. How many pitchers meet this criteria?
 > ANSWER: 10 pitchers meet this criteria.
 
 ```{r}
-Pitching
 PitchingTotals <- Pitching %>%
   select(playerID,stint,W,SO) %>%
   group_by(playerID) %>%
@@ -83,7 +82,6 @@ a. The Violations data set in the `mdsr` package contains information regarding 
 > ANSWER: While the pattern is not totally clear, it appears as though the median violation score by zipcode or by dba tends to increase as inspections increase.
 
 ```{r}
-Violations
 ViolationsZip <- Violations %>%
   select(zipcode,score) %>%
   filter(is.na(score)==FALSE)%>%
@@ -131,8 +129,11 @@ ggplot(data = ViolationsDba) +
       x = total_insp,y=med_score))+
       geom_smooth(aes(x = total_insp, 
       y = med_score), method = "lm")+
-  geom_curve(aes(x=200,y=35,xend = 218,yend=15),arrow = arrow(length = unit(0.03, "npc")))+
-  geom_text(x=190,y=40,label = 'Crown Fried Chicken',size=3)
+  geom_curve(aes(x=200,y=35,xend = 218,yend=15)
+             ,arrow = arrow(length = unit(0.03,
+              "npc")))+
+  geom_text(x=190,y=40,label = 'Crown Fried
+            Chicken',size=3)
 ```
 
 
@@ -141,9 +142,9 @@ ggplot(data = ViolationsDba) +
 
 Generate the code to convert the data frame shown with this problem in the textbook (on page 130, and shown below) to wide format (i.e., the result table).  Hint: use `gather()` in conjunction with `spread()`; OR `pivot_longer()` in conjunction with `pivot_wider()`.
 
-![](images/mdsr_ex_5_7.jpg)
-
 ```{r}
+#Didn't use pivotlonger, but this got the job done!
+
 FakeDataLong <- data.frame(grp = c("A","A","B", "B")
                            , sex = c("F", "M", "F", "M")
                            , meanL = c(0.22, 0.47, 0.33, 0.55)
@@ -151,6 +152,19 @@ FakeDataLong <- data.frame(grp = c("A","A","B", "B")
                            , meanR = c(0.34, 0.57, 0.40, 0.65)
                            , sdR = c(0.08, 0.33, 0.07, 0.27))
 
+DataWide <- FakeDataLong %>%
+  pivot_wider(
+    names_from = sex, 
+    values_from = c(meanL,meanR,sdL,meanR,sdR), 
+    values_fill = 0) %>%
+    select(grp, F.meanL = meanL_F, 
+           F.meanR = meanR_F,
+           F.sdL = sdL_F, 
+           F.sdR = sdR_F, 
+           M.meanL = meanL_M, 
+           M.meanR = meanR_M, 
+           M.sdL = sdL_M, M.sdR = sdR_M)
+DataWide
 ```
 
 \newpage
