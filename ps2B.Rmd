@@ -1,6 +1,6 @@
 ---
 title: 'STAT 231: Problem Set 2B'
-author: "YOUR NAME HERE"
+author: "Matthew Perkins"
 date: "due by 5 PM on Friday, March 5"
 output:
   pdf_document: default
@@ -27,6 +27,7 @@ Steps to proceed:
 ```{r, setup, include=FALSE}
 library(mdsr)   
 library(tidyverse)
+library(Lahman)
 
 knitr::opts_chunk$set(
   tidy=FALSE,     # display code as typed
@@ -47,18 +48,30 @@ Use the `Pitching` data frame from the `Lahman` package to identify every pitche
 
 a. How many pitchers meet this criteria?  
 
-> ANSWER: 
+> ANSWER: 10 pitchers meet this criteria.
 
 ```{r}
-
+Pitching
+PitchingTotals <- Pitching %>%
+  select(playerID,stint,W,SO) %>%
+  group_by(playerID) %>%
+  summarize(
+    total_W=sum(W),
+    total_SO=sum(SO))%>%
+    arrange(desc(total_SO))%>%
+  filter(total_W>299 & total_SO > 3000)
+PitchingTotals
 ```
 
 b. Which of these pitchers had the most accumulated strikeouts?  How many strikeouts had he accumulated?  What is the most strikeouts he had in one season?
 
-> ANSWER: 
+> ANSWER: Nolan Ryan accumulated the most strikeouts, with a total of 5714. In the 1973 season, he had 383 strikeouts.
 
 ```{r}
-
+Nol <- Pitching %>%
+  filter(playerID == "ryanno01") %>%
+    arrange(desc(SO))
+Nol
 ```
 
 
@@ -67,10 +80,44 @@ b. Which of these pitchers had the most accumulated strikeouts?  How many strike
 
 a. The Violations data set in the `mdsr` package contains information regarding the outcome of health inspections in New York City.  Use these data to calculate the median violation score by zipcode and dba for zipcodes in Manhattan.  What pattern (if any) do you see between the number of inspections and the median score?  Generate a visualization to support your response.  
 
-> ANSWER:  
+> ANSWER: While the pattern is not totally clear, it appears as though the median violation score by zipcode or by dba tends to increase as inspections increase.
 
 ```{r}
+Violations
+ViolationsZip <- Violations %>%
+  select(zipcode,score) %>%
+  filter(is.na(score)==FALSE)%>%
+  group_by(zipcode) %>%
+  summarize(
+    total_insp = length(zipcode),
+    med_score = median(score)) %>%
+    arrange(desc(med_score))
+ViolationsZip
 
+ggplot(data = ViolationsZip) +
+    geom_point(mapping = aes(
+      x = total_insp,
+      y = med_score))+
+      geom_smooth(aes(x = total_insp, 
+      y = med_score), method = "lm")
+      
+
+ViolationsDba <- Violations %>%
+  select(dba,score,zipcode) %>%
+  filter(is.na(score)==FALSE)%>%
+  group_by(dba,zipcode) %>%
+  summarize(
+    total_insp = length(dba),
+    med_score=median(score))%>%
+    arrange(desc(med_score))
+ViolationsDba
+
+ggplot(data = ViolationsDba) +
+    geom_point(mapping = aes(
+      x = total_insp,
+      y = med_score))+
+      geom_smooth(aes(x = total_insp, 
+      y = med_score), method = "lm")
 ```
 
 b.  In your visualization in part (a), there should be at least a few points that stand out as outliers.  For *one of the outliers*, add text to the outlier identifying what business it is and an arrow pointing from the text to the observation.  First, you may want to `filter` to identify the name of the business (so you know what text to add to the plot).  
@@ -78,8 +125,14 @@ b.  In your visualization in part (a), there should be at least a few points tha
 (Can't remember how to create a curved arrow in `ggplot`?  The answers to [this question](https://stackoverflow.com/questions/38008863/how-to-draw-a-nice-arrow-in-ggplot2/61383034) on Stack Exchange may help.  Can't remember how to add text to the plot in `ggplot`?  Check out the text examples with `annotate` [here](https://ggplot2.tidyverse.org/reference/annotate.html), or answers to [this question](https://stackoverflow.com/questions/14351608/color-one-point-and-add-an-annotation-in-ggplot2/14351810) that use `geom_text`.)
 
 ```{r}
-
-
+filter(ViolationsDba, total_insp>200)
+ggplot(data = ViolationsDba) +
+    geom_point(mapping = aes(
+      x = total_insp,y=med_score))+
+      geom_smooth(aes(x = total_insp, 
+      y = med_score), method = "lm")+
+  geom_curve(aes(x=200,y=35,xend = 218,yend=15),arrow = arrow(length = unit(0.03, "npc")))+
+  geom_text(x=190,y=40,label = 'Crown Fried Chicken',size=3)
 ```
 
 
