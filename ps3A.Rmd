@@ -74,7 +74,9 @@ The full code and slides from the video are also available here: https://github.
 ### a. 
 As you watch, or after watching, the tutorial, write down at least two questions you have about Shiny applications.
 
-> ANSWER:
+> ANSWER: 
+1: Why do shiny applications require use of the file name "app.R" or "server.R" and "ui.r"? While this is a minor point, it seems like it could make sense to have the option to create a separate standardized "entry" file that points to your actual application file.
+2: When should we use observe(), observeEvent(), and EventReactive()? It seems like they would be interchangeable for many applications.
 
 ### b.
 After watching the tutorial, create a new folder called "ps3a_shiny" within your "homeworks" folder in your GitHub repository.  Open a new R file (**not** R Markdown) by going to File > New File > R Script.  (In a .R file, you can only write R code.  Any comments need to have a hashtag (#) in front of them.)  Save the file as `app.R` within the "ps3a_shiny" folder.  Then,
